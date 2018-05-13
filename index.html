@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>mp4Player</title>
+  </head>
+  <body>
+    <!-- <div id="resize-fix" style="display: none">
+      <div id="title-bar">
+        <div id="logo"><i class="far fa-play-circle"></i></div>
+        <div id="name">mp4Player</div>
+        <div id="file-name"></div>
+        <div id="close" class="window-control"><i class="fas fa-times"></i></div>
+        <div id="restore" class="window-control"><i class="fas fa-window-restore"></i></div>
+        <div id="maximize" class="window-control"><i class="fas fa-window-maximize"></i></div>
+        <div id="minimize" class="window-control"><i class="fas fa-window-minimize"></i></div>
+      </div>      
+    </div> -->
+    
+    <div id="player">
+      <div id="menu">
+        <div id="backdrop">
+          <div id="info-keys">
+            <li><button id="close-menu"><i class="fas fa-times"></i></button></li>
+            <li class="key-info"><div class="key-name">Play / Pause</div><div class="key-key">Space</div></li>
+            <li class="key-info"><div class="key-name">Toggle fullscreen</div><div class="key-key">Enter & F</div></li>
+            <li class="key-info"><div class="key-name">Next file</div><div class="key-key">Page Down</div></li>
+            <li class="key-info"><div class="key-name">Previous file</div><div class="key-key">Page Up</div></li>
+            <li class="key-info"><div class="key-name">Step forward (5 seconds)</div><div class="key-key">Right Arrow</div></li>
+            <li class="key-info"><div class="key-name">Step backward (5 seconds)</div><div class="key-key">Left Arrow</div></li>
+            <li class="key-info"><div class="key-name">Step forward (15 seconds)</div><div class="key-key">D</div></li>
+            <li class="key-info"><div class="key-name">Step backward (15 seconds)</div><div class="key-key">A</div></li>
+            <li class="key-info"><div class="key-name">Go to start</div><div class="key-key">Home</div></li>
+            <li class="key-info"><div class="key-name">Mute / Unmute</div><div class="key-key">M</div></li>
+            <li class="key-info"><div class="key-name">Volume up</div><div class="key-key">Up Arrow</div></li>
+            <li class="key-info"><div class="key-name">Volume down</div><div class="key-key">Down Arrow</div></li>
+            <li class="key-info"><div class="key-name">Increase speed</div><div class="key-key">W</div></li>
+            <li class="key-info"><div class="key-name">Decrease speed</div><div class="key-key">S</div></li>
+          </div>
+        </div>
+      </div>
+      <div id="file-name-fs"></div>
+      <div id="video-container">
+        <video id="video" src=""  tabindex="-1"></video>
+      </div>
+
+      <div id="controls">
+        <div id="progress-bar">
+          <div id="progress-bar-tooltip"></div>
+          <input type="range" id="progress" class="disabled-from-start" value="0" step="0.001" tabindex="-1" disabled>
+          <progress id="progress-2" value="0"></progress>
+        </div>
+
+        <!-- <button id="open" title="Open File" tabindex="-1"><i class="fas fa-eject"></i></button>
+        <div class="controls-separator small">&nbsp;</div> -->
+        <button id="prev" class="disabled-from-start" title="Previous File" disabled tabindex="-1"><i class="fas fa-fast-backward"></i></button>
+        <button id="back15" class="disabled-from-start" title="Rewind 15 seconds" disabled tabindex="-1"><i class="fas fa-angle-double-left"></i></button>
+        <button id="back5" class="disabled-from-start" title="Rewind 5 seconds" disabled tabindex="-1"><i class="fas fa-angle-left"></i></button>
+        <button id="play-pause" class="disabled-from-start" title="Play / Pause" disabled tabindex="-1"><i class="fas fa-play"></i></button>
+        <button id="forward5" class="disabled-from-start" title="Forward 5 seconds" disabled tabindex="-1"><i class="fas fa-angle-right"></i></button>
+        <button id="forward15" class="disabled-from-start" title="Forward 15 seconds" disabled tabindex="-1"><i class="fas fa-angle-double-right"></i></button>
+        <button id="next" class="disabled-from-start" title="Next File" disabled tabindex="-1"><i class="fas fa-fast-forward"></i></button>
+
+        <div class="controls-separator large">&nbsp;&nbsp;&nbsp;</div>
+        
+        <div id="time-info">
+          <span id="position"></span> / <span id="duration"></span>
+        </div>
+
+        <div class="controls-separator large">&nbsp;&nbsp;&nbsp;</div>
+
+        <div id="volume-group">
+          <button id="mute" title="Mute / Unmute" tabindex="-1"><i class="fas fa-volume-up"></i></button>
+          <div class="controls-separator small"></div>
+          <input type="range" id="volume" title="asd" value="100" min="0" max="100" step="1" tabindex="-1">
+          <div class="controls-separator small">&nbsp;</div>
+          <span id="volume-display">100</span>       
+        </div>
+
+        <div id="controls-right">
+          <!-- <button id="settings" title="App Settings" tabindex="-1"><i class="fas fa-cogs"></i></button>
+          <div class="controls-separator small">&nbsp;</div> -->
+          <button id="keys" title="Keyboard shortcuts" tabindex="-1"><i class="fas fa-keyboard"></i></button>
+          <div class="controls-separator small">&nbsp;</div>
+          <span>Speed</span>
+          <div class="controls-separator small">&nbsp;</div>
+          <input type="range" id="speed" value="1" min="0.5" max="2" step="0.05" tabindex="-1">
+          <div class="controls-separator small">&nbsp;</div>
+          <span id="speed-display">1.00x</span>
+
+          <div class="controls-separator large">&nbsp;&nbsp;&nbsp;</div>
+
+          <button id="go-fs" title="Go Fullscreen" tabindex="-1"><i class="fas fa-expand"></i></button>
+          <button id="exit-fs" title="Exit Fullscreen" tabindex="-1"><i class="fas fa-compress"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
