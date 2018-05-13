@@ -1,16 +1,4 @@
-const fs = require('fs') 
-// const { remote } = require('electron')
-
-// Get Window
-// var win = remote.getCurrentWindow()
-
-// Window elements
-// const titleBar = document.getElementById('title-bar')
-// const fileName = document.getElementById('file-name')
-// const minimize = document.getElementById('minimize')
-// const maximize = document.getElementById('maximize')
-// const restore = document.getElementById('restore')
-// const close = document.getElementById('close')
+const fs = require('fs')
 
 // Supported file types
 fileTypes = ['MP4', 'MOV', 'MP3', 'OGG']
@@ -262,27 +250,6 @@ video.addEventListener('volumechange', handleVolumeChange);
 video.addEventListener('ratechange', handlePlaybackRateChange);
 video.addEventListener('ended', handleEnded);
 
-progress.addEventListener('input', handleProgressInput);
-speed.addEventListener('input', handleSpeedInput);
-volume.addEventListener('input', handleVolumeInput);
-
-keys.addEventListener('click', showMenu);
-closeMenu.addEventListener('click', hideMenu);
-backdrop.addEventListener('click', hideMenu);
-
-prev.addEventListener('click', () => loadVideoFromList(fileIndex - 1));
-back15.addEventListener('click', ()=> jump(-15));
-back5.addEventListener('click', ()=> jump(-5));
-playPause.addEventListener('click', togglePlayPause);
-forward5.addEventListener('click', ()=> jump(5));
-forward15.addEventListener('click', ()=> jump(15));
-next.addEventListener('click', () => loadVideoFromList(fileIndex + 1));
-
-mute.addEventListener('click', toggleMute);
-
-goFs.addEventListener('click', goFullscreen);
-exitFs.addEventListener('click', exitFullscreen);
-
 document.onwebkitfullscreenchange = function ( event ) {
   if (!document.webkitFullscreenElement) {
     clearTimeout(controlsTimer)
@@ -317,39 +284,44 @@ document.onwebkitfullscreenchange = function ( event ) {
   }
 }
 
-// MOUSE EVENTS
-controls.addEventListener('mousemove', () => {
-  clearTimeout(controlsTimer);
-});
+progress.addEventListener('input', handleProgressInput);
+speed.addEventListener('input', handleSpeedInput);
+volume.addEventListener('input', handleVolumeInput);
 
+keys.addEventListener('click', showMenu);
+closeMenu.addEventListener('click', hideMenu);
+backdrop.addEventListener('click', hideMenu);
+
+prev.addEventListener('click', () => loadVideoFromList(fileIndex - 1));
+back15.addEventListener('click', ()=> jump(-15));
+back5.addEventListener('click', ()=> jump(-5));
+playPause.addEventListener('click', togglePlayPause);
+forward5.addEventListener('click', ()=> jump(5));
+forward15.addEventListener('click', ()=> jump(15));
+next.addEventListener('click', () => loadVideoFromList(fileIndex + 1));
+
+mute.addEventListener('click', toggleMute);
+
+goFs.addEventListener('click', goFullscreen);
+exitFs.addEventListener('click', exitFullscreen);
+
+// MOUSE EVENTS
 videoContainer.addEventListener('mousemove', () => {
   if (document.webkitFullscreenElement) {
     showControls();
   }
 });
 
-videoContainer.addEventListener('click', () => {
-  togglePlayPause();
-});
-
-videoContainer.addEventListener('dblclick', () => {
-  toggleFullscreen();
-});
+videoContainer.addEventListener('click', () => togglePlayPause());
+videoContainer.addEventListener('dblclick', () => toggleFullscreen());
+controls.addEventListener('mousemove', () => clearTimeout(controlsTimer));
 
 progressBar.addEventListener("mousemove", function(e) {
   if (!progress.disabled) {
     let x = e.pageX;
     let progressWidth = window.innerWidth - 24;
     let position = x - 12; //controls padding
-    let calculated = position * progress.max / progressWidth;
-    
-    // console.log('iw', window.innerWidth);  
-    // console.log('x', x);
-    // console.log('w', progressWidth);
-    // console.log('p', position);
-    // console.log('c', calculated);
-    // console.log('d', video.duration);
-    
+    let calculated = position * progress.max / progressWidth;    
     let valueToShow = composePositionText(progress.max, (position * progress.max) / progressWidth);
   
     progressBarTooltip.innerHTML = valueToShow;
@@ -374,40 +346,7 @@ progressBar.addEventListener("mouseleave", () => {
   progress2.style.paddingTop = '8px';
 });
 
-
-// WINDOW EVENTS
-
-// maximize.addEventListener('click', () => {
-//   win.maximize();
-// })
-// restore.addEventListener('click', () => {
-//   win.unmaximize();
-// })
-// minimize.addEventListener('click', () => {
-//   win.minimize();
-// })
-// close.addEventListener('click', () => {
-//   win.close();
-// })
-
-// win.on('maximize', () => {
-//   maximize.style.display = 'none';
-//   restore.style.display = 'block';
-  
-// })
-// win.on('unmaximize', () => {
-//   restore.style.display = 'none';
-//   maximize.style.display = 'block';
-//   // win.setBounds({
-//   //   width: 1280
-//   // })
-//   appHeight = window.innerHeight;
-//   appWidth = window.innerWidth;
-//   win.setSize(appWidth, appHeight);
-// })
-
 // DRAG & DROP EVENTS
-
 videoContainer.ondragover = () => {
   return false;
 };
