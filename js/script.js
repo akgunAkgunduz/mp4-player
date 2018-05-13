@@ -71,6 +71,70 @@ let fileIndex = 0
 let playList = []
 
 // HANDLERS
+function handleLoadedMetadata() {
+  progress.setAttribute('max', video.duration);
+  progress2.setAttribute('max', video.duration);
+
+  position.textContent = primePositionText(video.duration);
+  duration.textContent = composeDurationText(video.duration);
+  timeInfo.style.visibility = 'visible';
+  
+  for (let i = 0; i < disabledFromStart.length; i++) {
+    disabledFromStart[i].disabled = false;
+  }
+
+  playPause.click();
+}
+
+function handleTimeUpdate() {
+  progress.value = video.currentTime;
+  progress2.value = video.currentTime;
+  position.textContent = composePositionText(video.duration, video.currentTime);
+}
+
+function handleVolumeChange() {
+  if (video.volume == 0) {
+    muteIcon.classList.remove('fa-volume-up');
+    muteIcon.classList.add('fa-volume-off');
+  } else {
+    muteIcon.classList.remove('fa-volume-off');
+    muteIcon.classList.add('fa-volume-up');
+  }
+  volume.value = video.volume * 100;
+  volumeDisplay.innerText = volume.value;
+
+  console.log(video.volume);
+  console.log('Player Volume:', playerVolume);
+}
+
+function handlePlaybackRateChange() {
+  speed.value = video.playbackRate;
+  playerSpeed = video.playbackRate;
+  speedDisplay.innerText = parseFloat(speed.value).toFixed(2) + 'x';
+
+  console.log(video.playbackRate);
+  console.log('Player Speed:', playerSpeed);
+}
+
+function handleEnded(){
+  playPauseIcon.classList.remove('fa-pause');
+  playPauseIcon.classList.add('fa-play');
+}
+
+function handleProgressInput() {
+  video.currentTime = progress.value;
+  progress2.value = progress.value;
+}
+
+function handleSpeedInput() {
+  video.playbackRate = speed.value
+}
+
+function handleVolumeInput() {
+  video.volume = volume.value / 100
+  playerVolume = video.volume 
+}
+
 function showMenu() {
   menu.style.display = 'block';
   setTimeout(() => infoKeys.style.right = '0', 50); 
@@ -192,89 +256,32 @@ toggleFullscreen = () => {
 }
 
 // EVENT LISTENERS
-video.addEventListener('loadedmetadata', function() {
-  progress.setAttribute('max', video.duration);
-  progress2.setAttribute('max', video.duration);
+video.addEventListener('loadedmetadata', handleLoadedMetadata);
+video.addEventListener('timeupdate', handleTimeUpdate);
+video.addEventListener('volumechange', handleVolumeChange);
+video.addEventListener('ratechange', handlePlaybackRateChange);
+video.addEventListener('ended', handleEnded);
 
-  position.textContent = primePositionText(video.duration);
-  duration.textContent = composeDurationText(video.duration);
-  timeInfo.style.visibility = 'visible';
-  
-  for (let i = 0; i < disabledFromStart.length; i++) {
-    disabledFromStart[i].disabled = false;
-  }
+progress.addEventListener('input', handleProgressInput);
+speed.addEventListener('input', handleSpeedInput);
+volume.addEventListener('input', handleVolumeInput);
 
-  playPause.click();
-});
+keys.addEventListener('click', showMenu);
+closeMenu.addEventListener('click', hideMenu);
+backdrop.addEventListener('click', hideMenu);
 
-video.addEventListener('timeupdate', function() {
-  progress.value = video.currentTime;
-  progress2.value = video.currentTime;
-  position.textContent = composePositionText(video.duration, video.currentTime);
-});
+prev.addEventListener('click', () => loadVideoFromList(fileIndex - 1));
+back15.addEventListener('click', ()=> jump(-15));
+back5.addEventListener('click', ()=> jump(-5));
+playPause.addEventListener('click', togglePlayPause);
+forward5.addEventListener('click', ()=> jump(5));
+forward15.addEventListener('click', ()=> jump(15));
+next.addEventListener('click', () => loadVideoFromList(fileIndex + 1));
 
-video.addEventListener('volumechange', function() {
-  if (video.volume == 0) {
-    muteIcon.classList.remove('fa-volume-up');
-    muteIcon.classList.add('fa-volume-off');
-  } else {
-    muteIcon.classList.remove('fa-volume-off');
-    muteIcon.classList.add('fa-volume-up');
-  }
-  volume.value = video.volume * 100;
-  volumeDisplay.innerText = volume.value;
+mute.addEventListener('click', toggleMute);
 
-  console.log(video.volume);
-  console.log('Player Volume:', playerVolume);
-})
-
-video.addEventListener('ratechange', function() {
-  speed.value = video.playbackRate;
-  playerSpeed = video.playbackRate;
-  speedDisplay.innerText = parseFloat(speed.value).toFixed(2) + 'x';
-
-  console.log(video.playbackRate);
-  console.log('Player Speed:', playerSpeed);
-})
-
-video.addEventListener('ended', () => {
-  playPauseIcon.classList.remove('fa-pause');
-  playPauseIcon.classList.add('fa-play');
-})
-
-progress.addEventListener('input', function() {
-  video.currentTime = progress.value;
-  progress2.value = progress.value;
-})
-
-speed.addEventListener('input', () => {
-  video.playbackRate = speed.value
-})
-
-volume.addEventListener('input', () => {
-  video.volume = volume.value / 100
-  playerVolume = video.volume 
-})
-
-keys.addEventListener('click', showMenu)
-closeMenu.addEventListener('click', hideMenu)
-backdrop.addEventListener('click', hideMenu)
-
-prev.addEventListener('click', () => loadVideoFromList(fileIndex - 1))
-back15.addEventListener('click', ()=> jump(-15))
-back5.addEventListener('click', ()=> jump(-5))
-
-playPause.addEventListener('click', togglePlayPause)
-
-forward5.addEventListener('click', ()=> jump(5))
-forward15.addEventListener('click', ()=> jump(15))
-next.addEventListener('click', () => loadVideoFromList(fileIndex + 1))
-
-mute.addEventListener('click', toggleMute)
-
-goFs.addEventListener('click', goFullscreen)
-
-exitFs.addEventListener('click', exitFullscreen)
+goFs.addEventListener('click', goFullscreen);
+exitFs.addEventListener('click', exitFullscreen);
 
 document.onwebkitfullscreenchange = function ( event ) {
   if (!document.webkitFullscreenElement) {
@@ -404,12 +411,15 @@ progressBar.addEventListener("mouseleave", () => {
 videoContainer.ondragover = () => {
   return false;
 };
+
 videoContainer.ondragleave = () => {
   return false;
 };
+
 videoContainer.ondragend = () => {
   return false;
 };
+
 videoContainer.ondrop = e => {
   e.preventDefault();
 
@@ -441,8 +451,7 @@ videoContainer.ondrop = e => {
     fileNameFs.textContent = file.name;
   
     video.playbackRate = playerSpeed
-  }
-     
+  }    
 
   return false;
 };
