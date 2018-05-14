@@ -74,7 +74,7 @@ progress[value]::-webkit-progress-value {
   top: 0;
   width: 100%;
   height: 100vh;
-  z-index: 5;
+  z-index: 6;
   color: #fff;
   display: none;  
 }
@@ -86,7 +86,7 @@ progress[value]::-webkit-progress-value {
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 6;
+  z-index: 7;
 }
 
 #info-keys {
@@ -98,7 +98,7 @@ progress[value]::-webkit-progress-value {
   background-color: #333;
   padding: 1rem;
   transition: right .3s;
-  z-index: 7;
+  z-index: 8;
 }
 
 #info-keys li {
@@ -123,15 +123,39 @@ progress[value]::-webkit-progress-value {
 
 #file-name-fs {
   position: fixed;
+  height: 50px;
   width: 100%;
   top: 0;
   left: 0;
-  padding: 12px;
+  padding: 0 12px;
   display: none;
-  font-size: 32px;
+  font-size: 25px;
+  line-height: 50px;
   color: #fff;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 4;
+}
+
+#messages {
+  display: none;
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  min-width: 10px;
+  max-width: 300px;
+  height: 50px;
+  padding: 0 10px;
+  color: #fff;
+  background-color: #333;
+  border: 1px solid #ddd;
+  /* box-shadow: 0 0 4px 1px #ccc inset; */
+  font-size: 25px;
+  line-height: 48px;
+  z-index: 5;
+}
+#messages.in-fs {
+  top: 60px;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 #video-container {

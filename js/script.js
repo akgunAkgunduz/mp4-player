@@ -11,6 +11,7 @@ const closeMenu = document.getElementById('close-menu')
 
 // Video Elements
 const fileNameFs = document.getElementById('file-name-fs')
+const messages = document.getElementById('messages')
 const videoContainer = document.getElementById('video-container');
 const video = document.getElementById('video');
 
@@ -48,6 +49,7 @@ const disabledFromStart = document.getElementsByClassName('disabled-from-start')
 
 // Variables
 let controlsTimer
+let messagesTimer
 let playerVolume = 1
 let playerSpeed = 1
 let currentFolder
@@ -89,7 +91,8 @@ function handleVolumeChange() {
     muteIcon.classList.add('fa-volume-up');
   }
   volume.value = video.volume * 100;
-  volumeDisplay.innerText = volume.value;
+  volumeDisplay.innerText = volume.value + '%';
+  updateMessages('Volume: ' + volumeDisplay.innerText)
 
   console.log(video.volume);
   console.log('Player Volume:', playerVolume);
@@ -99,6 +102,7 @@ function handlePlaybackRateChange() {
   speed.value = video.playbackRate;
   playerSpeed = video.playbackRate;
   speedDisplay.innerText = parseFloat(speed.value).toFixed(2) + 'x';
+  
 
   console.log(video.playbackRate);
   console.log('Player Speed:', playerSpeed);
@@ -112,6 +116,8 @@ function handleEnded(){
 function handleProgressInput() {
   video.currentTime = progress.value;
   progress2.value = progress.value;
+
+  updateMessages(composePositionText(video.duration, video.currentTime) + ' / ' + composeDurationText(video.duration))
 }
 
 function handleSpeedInput() {
@@ -160,23 +166,27 @@ function loadVideoFromList(newIndex) {
 
 togglePlayPause = () => {
   if (video.paused || video.ended) {
-    playPauseIcon.classList.remove('fa-play')
-    playPauseIcon.classList.add('fa-pause')
+    playPauseIcon.classList.remove('fa-play');
+    playPauseIcon.classList.add('fa-pause');
     video.play();
+    updateMessages('Play');
   } 
   else {
-    playPauseIcon.classList.remove('fa-pause')
-    playPauseIcon.classList.add('fa-play')
+    playPauseIcon.classList.remove('fa-pause');
+    playPauseIcon.classList.add('fa-play');
     video.pause();
+    updateMessages('Pause');
   } 
 }
 
 jump = (value) => {
-  video.currentTime += value 
+  video.currentTime += value;
+  updateMessages(composePositionText(video.duration, video.currentTime) + ' / ' + composeDurationText(video.duration))
 }
 
 jumpToStart = () => {
-  video.currentTime = 0 
+  video.currentTime = 0;
+  updateMessages(composePositionText(video.duration, video.currentTime) + ' / ' + composeDurationText(video.duration))
 }
 
 toggleMute = () => {
@@ -192,35 +202,39 @@ toggleMute = () => {
 }
 
 increaseVolume = () => {  
-  let newVolume = (video.volume + 0.05).toFixed(2)
+  let newVolume = (video.volume + 0.05).toFixed(2);
   if (newVolume > 1) {
-    video.volume = 1
+    video.volume = 1;
   } else {
-    video.volume = newVolume
+    video.volume = newVolume;
   }
-  playerVolume = video.volume    
+  playerVolume = video.volume;
+  updateMessages('Volume: ' + volumeDisplay.innerText);    
 }
 
 decreaseVolume = () => {
-  let newVolume = (video.volume - 0.05).toFixed(2)
+  let newVolume = (video.volume - 0.05).toFixed(2);
   if (newVolume < 0) {
-    video.volume = 0
+    video.volume = 0;
   } else {
-    video.volume = newVolume
+    video.volume = newVolume;
   }
-  playerVolume = video.volume
+  playerVolume = video.volume;
+  updateMessages('Volume: ' + volumeDisplay.innerText);
 }
 
 decreaseSpeed = () => {
   if (video.playbackRate > 0.5) {
     video.playbackRate = (video.playbackRate - 0.05).toFixed(2)   
   }
+  updateMessages('Speed: ' + speedDisplay.innerText)
 }
 
 increaseSpeed = () => {
   if (video.playbackRate < 2) {
     video.playbackRate = (video.playbackRate + 0.05).toFixed(2)
   }
+  updateMessages('Speed: ' + speedDisplay.innerText)
 }
 
 goFullscreen = () => {
@@ -264,6 +278,8 @@ document.onwebkitfullscreenchange = function ( event ) {
 
     controls.style.display = 'block'
 
+    messages.classList.remove('in-fs');
+
     // keys.style.display = 'inline-block'
 
     exitFs.style.display = 'none'
@@ -275,6 +291,8 @@ document.onwebkitfullscreenchange = function ( event ) {
     videoContainer.style.top = '0'
     videoContainer.style.left = '0'
     videoContainer.style.height = '100%'
+
+    messages.classList.add('in-fs');
 
     // keys.style.display = 'none'
 
@@ -462,6 +480,15 @@ function showControls() {
   fileNameFs.style.display = 'block';
   clearInterval(controlsTimer);
   hideControlsDelayed();
+}
+
+function updateMessages(message) {
+  clearTimeout(messagesTimer);
+  messages.textContent = message;
+  messages.style.display = 'block';
+  messagesTimer = setTimeout(() => {
+    messages.style.display = 'none';
+  }, 3000)
 }
 
 function getHours(duration) {
