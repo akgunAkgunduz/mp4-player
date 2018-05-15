@@ -18,6 +18,7 @@ function createWindow () {
     height: 809,
     minWidth: 1296,
     minHeight: 809,
+    icon: './images/player.ico',
     backgroundColor: '#333',
     // frame: false
   })
@@ -32,7 +33,7 @@ function createWindow () {
   mainWindow.setMenu(null);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools({detach: true})
+  mainWindow.webContents.openDevTools({detach: true});
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

@@ -92,7 +92,7 @@ function handleVolumeChange() {
   }
   volume.value = video.volume * 100;
   volumeDisplay.innerText = volume.value + '%';
-  updateMessages('Volume: ' + volumeDisplay.innerText)
+  updateMessages('Volume: ' + volumeDisplay.innerText);
 
   console.log(video.volume);
   console.log('Player Volume:', playerVolume);
@@ -102,6 +102,7 @@ function handlePlaybackRateChange() {
   speed.value = video.playbackRate;
   playerSpeed = video.playbackRate;
   speedDisplay.innerText = parseFloat(speed.value).toFixed(2) + 'x';
+  updateMessages('Speed: ' + speedDisplay.innerText);
   
 
   console.log(video.playbackRate);
@@ -225,35 +226,35 @@ decreaseVolume = () => {
 
 decreaseSpeed = () => {
   if (video.playbackRate > 0.5) {
-    video.playbackRate = (video.playbackRate - 0.05).toFixed(2)   
+    video.playbackRate = (video.playbackRate - 0.05).toFixed(2)   ;
+    updateMessages('Speed: ' + speedDisplay.innerText);
   }
-  updateMessages('Speed: ' + speedDisplay.innerText)
 }
 
 increaseSpeed = () => {
   if (video.playbackRate < 2) {
-    video.playbackRate = (video.playbackRate + 0.05).toFixed(2)
-  }
-  updateMessages('Speed: ' + speedDisplay.innerText)
+    video.playbackRate = (video.playbackRate + 0.05).toFixed(2);
+    updateMessages('Speed: ' + speedDisplay.innerText);
+  }  
 }
 
 goFullscreen = () => {
-  player.webkitRequestFullscreen()
-  goFs.style.display = 'none'
-  exitFs.style.display = 'inline-block'
+  player.webkitRequestFullscreen();
+  goFs.style.display = 'none';
+  exitFs.style.display = 'inline-block';
 }
 
 exitFullscreen = () => {
-  document.webkitExitFullscreen()
-  exitFs.style.display = 'none'
-  goFs.style.display = 'inline-block'
+  document.webkitExitFullscreen();
+  exitFs.style.display = 'none';
+  goFs.style.display = 'inline-block';
 }
 
 toggleFullscreen = () => {
   if (!document.webkitFullscreenElement) {
-    goFullscreen()
+    goFullscreen();
   } else {
-    exitFullscreen()
+    exitFullscreen();
   }
 }
 
@@ -266,39 +267,39 @@ video.addEventListener('ended', handleEnded);
 
 document.onwebkitfullscreenchange = function ( event ) {
   if (!document.webkitFullscreenElement) {
-    clearTimeout(controlsTimer)
+    clearTimeout(controlsTimer);
 
-    controls.style.backgroundColor = '#333'
+    controls.style.backgroundColor = '#333';
 
     fileNameFs.style.display = 'none';
 
-    videoContainer.style.position = 'static'
-    videoContainer.style.height = 'calc(100vh - 50px)'
-    video.style.cursor = 'default'
+    videoContainer.style.position = 'static';
+    videoContainer.style.height = 'calc(100vh - 50px)';
+    video.style.cursor = 'default';
 
-    controls.style.display = 'block'
+    controls.style.display = 'block';
 
     messages.classList.remove('in-fs');
 
-    // keys.style.display = 'inline-block'
+    // keys.style.display = 'inline-block';
 
-    exitFs.style.display = 'none'
-    goFs.style.display = 'inline-block'    
+    exitFs.style.display = 'none';
+    goFs.style.display = 'inline-block';
   } else {
-    controls.style.backgroundColor = 'rgba(0,0,0,0.33)'
+    controls.style.backgroundColor = 'rgba(0,0,0,0.33)';
 
-    videoContainer.style.position = 'fixed'
-    videoContainer.style.top = '0'
-    videoContainer.style.left = '0'
-    videoContainer.style.height = '100%'
+    videoContainer.style.position = 'fixed';
+    videoContainer.style.top = '0';
+    videoContainer.style.left = '0';
+    videoContainer.style.height = '100%';
 
     messages.classList.add('in-fs');
 
-    // keys.style.display = 'none'
+    // keys.style.display = 'none';
 
-    clearTimeout(controlsTimer)
+    clearTimeout(controlsTimer);
 
-    hideControlsDelayed()
+    hideControlsDelayed();
   }
 }
 
