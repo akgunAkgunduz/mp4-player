@@ -19,7 +19,7 @@ function createWindow () {
     minWidth: 1296,
     minHeight: 809,
     icon: './images/player.ico',
-    backgroundColor: '#333',
+    backgroundColor: '#000',
     // frame: false
   })
 
