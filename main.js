@@ -20,7 +20,12 @@ function createWindow () {
     minHeight: 809,
     icon: './images/player.ico',
     backgroundColor: '#000',
-    // frame: false
+    show: false
+  })
+
+  // show when the app is ready
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
   })
 
   // and load the index.html of the app.
@@ -33,7 +38,7 @@ function createWindow () {
   mainWindow.setMenu(null);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools({detach: true});
+  // mainWindow.webContents.openDevTools({detach: true});
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
